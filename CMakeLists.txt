@@ -43,11 +43,7 @@ set(SOURCES
     src/vis_milk2/textmgr.cpp
     src/vis_milk2/utility.cpp
     src/vis_milk2/wasabi.cpp
-    src/vis_milk2/plugin.rc
 )
-
-# Force all C files to compile as C++ to avoid MSVC C2099 constant initializer errors
-set_source_files_properties(${SOURCES} PROPERTIES LANGUAGE CXX)
 
 # Handle MSVC-specific requirements (legacy scoping, 32-bit architecture)
 if(MSVC)

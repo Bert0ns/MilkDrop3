@@ -473,6 +473,13 @@ static const EEL_F eel_zero=0.0, eel_one=1.0;
 
 #if defined(_MSC_VER) && _MSC_VER >= 1400
 static double nseel_floor(double a) { return floor(a); }
+static double nseel_ceil(double a) { return ceil(a); }
+static double nseel_asin(double a) { return asin(a); }
+static double nseel_acos(double a) { return acos(a); }
+static double nseel_atan(double a) { return atan(a); }
+static double nseel_atan2(double a, double b) { return atan2(a, b); }
+static double nseel_pow(double a, double b) { return pow(a, b); }
+static double nseel_exp(double a) { return exp(a); }
 #endif
 
 static double eel1band(double a, double b)
@@ -538,19 +545,32 @@ static functionType fnTable1[] = {
    { "cos",    nseel_asm_cos,nseel_asm_cos_end,   1 },
    { "tan",    nseel_asm_tan,nseel_asm_tan_end,   1 },
 #endif
+#if defined(_MSC_VER) && _MSC_VER >= 1400
+   { "asin",   nseel_asm_1pdd,nseel_asm_1pdd_end,  1, {&nseel_asin}, },
+   { "acos",   nseel_asm_1pdd,nseel_asm_1pdd_end,  1, {&nseel_acos}, },
+   { "atan",   nseel_asm_1pdd,nseel_asm_1pdd_end,  1, {&nseel_atan}, },
+   { "atan2",  nseel_asm_2pdd,nseel_asm_2pdd_end, 2, {&nseel_atan2}, },
+#else
    { "asin",   nseel_asm_1pdd,nseel_asm_1pdd_end,  1, {&asin}, },
    { "acos",   nseel_asm_1pdd,nseel_asm_1pdd_end,  1, {&acos}, },
    { "atan",   nseel_asm_1pdd,nseel_asm_1pdd_end,  1, {&atan}, },
    { "atan2",  nseel_asm_2pdd,nseel_asm_2pdd_end, 2, {&atan2}, },
+#endif
    { "sqr",    nseel_asm_sqr,nseel_asm_sqr_end,   1 },
 #ifdef __ppc__
    { "sqrt",   nseel_asm_1pdd,nseel_asm_1pdd_end,  1, {&sqrt}, },
 #else
    { "sqrt",   nseel_asm_sqrt,nseel_asm_sqrt_end,  1 },
 #endif
+#if defined(_MSC_VER) && _MSC_VER >= 1400
+   { "pow",    nseel_asm_2pdd,nseel_asm_2pdd_end,   2, {&nseel_pow}, },
+   { "_powop",    nseel_asm_2pdds,nseel_asm_2pdds_end,   2, {&nseel_pow}, },
+   { "exp",    nseel_asm_1pdd,nseel_asm_1pdd_end,   1, {&nseel_exp}, },
+#else
    { "pow",    nseel_asm_2pdd,nseel_asm_2pdd_end,   2, {&pow}, },
    { "_powop",    nseel_asm_2pdds,nseel_asm_2pdds_end,   2, {&pow}, },
    { "exp",    nseel_asm_1pdd,nseel_asm_1pdd_end,   1, {&exp}, },
+#endif
 #ifdef __ppc__
    { "log",    nseel_asm_1pdd,nseel_asm_1pdd_end,   1, {&log} },
    { "log10",  nseel_asm_1pdd,nseel_asm_1pdd_end, 1, {&log10} },
@@ -570,10 +590,11 @@ static functionType fnTable1[] = {
 
 #if defined(_MSC_VER) && _MSC_VER >= 1400
    { "floor",  nseel_asm_1pdd,nseel_asm_1pdd_end, 1, {&nseel_floor} },
+   { "ceil",   nseel_asm_1pdd,nseel_asm_1pdd_end,  1, {&nseel_ceil} },
 #else
    { "floor",  nseel_asm_1pdd,nseel_asm_1pdd_end, 1, {&floor} },
-#endif
    { "ceil",   nseel_asm_1pdd,nseel_asm_1pdd_end,  1, {&ceil} },
+#endif
 #ifdef __ppc__
    { "invsqrt",   nseel_asm_invsqrt,nseel_asm_invsqrt_end,  1,  },
 #else
