@@ -57,7 +57,7 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 // SUBDIR puts milkdrop's documentation, INI file, presets folder, etc.
 // in a subdir underneath Winamp\Plugins.
-#define SUBDIR  L"Milkdrop2\\"   //""
+#define SUBDIR  L"Milkdrop3\\"   //""
 
 // INIFILE is the name of the .INI file that will save the user's
 // config panel settings.  Do not include a path; just give the filename.

@@ -87,3 +87,11 @@ if(WIN32)
         user32
     )
 endif()
+
+# Copy the resources and presets from the reference distribution to the build output directory
+add_custom_command(TARGET MilkDrop3 POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+        "${CMAKE_CURRENT_SOURCE_DIR}/reference/MilkDrop 3.33/Milkdrop3"
+        "$<TARGET_FILE_DIR:MilkDrop3>/plugins/Milkdrop3"
+    COMMENT "Copying MilkDrop3 resources and presets to the build directory..."
+)

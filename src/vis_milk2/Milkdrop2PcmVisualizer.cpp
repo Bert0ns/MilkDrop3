@@ -533,64 +533,10 @@ int StartThreads(HINSTANCE instance) {
 
     //NEED TO STOP CAPTURE
     // at this point capture is running
-    // wait for the user to press a key or for capture to error out
     {
         WaitForSingleObjectOnExit waitForThread(hThread);
         SetEventOnExit setStopEvent(hStopEvent);
-        HANDLE hStdIn = GetStdHandle(STD_INPUT_HANDLE);
-
-        if (INVALID_HANDLE_VALUE == hStdIn) {
-            ERR(L"GetStdHandle returned INVALID_HANDLE_VALUE: last error is %u", GetLastError());
-            return -__LINE__;
-        }
-
-        LOG(L"%s", L"Press Enter to quit...");
-
-        HANDLE rhHandles[2] = { hThread, hStdIn };
-
-        bool bKeepWaiting = true;
-        while (bKeepWaiting) {
-
-            dwWaitResult = WaitForMultipleObjects(2, rhHandles, FALSE, INFINITE);
-
-            switch (dwWaitResult) {
-
-            case WAIT_OBJECT_0: // hThread
-                ERR(L"%s", L"The thread terminated early - something bad happened");
-                bKeepWaiting = false;
-                break;
-
-            case WAIT_OBJECT_0 + 1: // hStdIn
-                                    // see if any of them was an Enter key-up event
-                /*INPUT_RECORD rInput[128];
-                DWORD nEvents;
-                if (!ReadConsoleInput(hStdIn, rInput, ARRAYSIZE(rInput), &nEvents)) {
-                    ERR(L"ReadConsoleInput failed: last error is %u", GetLastError());
-                    bKeepWaiting = false;
-                }
-                else {
-                    for (DWORD i = 0; i < nEvents; i++) {
-                        if (
-                            KEY_EVENT == rInput[i].EventType &&
-                            VK_RETURN == rInput[i].Event.KeyEvent.wVirtualKeyCode &&
-                            !rInput[i].Event.KeyEvent.bKeyDown
-                            ) {*/
-                            LOG(L"%s", L"Stopping capture...");
-                            bKeepWaiting = false;
-                            break;
-                /*        }
-                    }
-                    // if none of them were Enter key-up events,
-                    // continue waiting
-                }*/
-                break;
-
-            default:
-                ERR(L"WaitForMultipleObjects returned unexpected value 0x%08x", dwWaitResult);
-                bKeepWaiting = false;
-                break;
-            } // switch
-        } // while
+        LOG(L"%s", L"Stopping capture...");
     } // naked scope
 
     // at this point the thread is definitely finished
