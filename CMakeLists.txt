@@ -35,6 +35,7 @@ set(SOURCES
     src/vis_milk2/menu.cpp
     src/vis_milk2/Milkdrop2PcmVisualizer.cpp
     src/vis_milk2/milkdropfs.cpp
+    src/vis_milk2/md_image.cpp
     src/vis_milk2/plugin.cpp
     src/vis_milk2/pluginshell.cpp
     src/vis_milk2/state.cpp
@@ -91,7 +92,7 @@ endif()
 # Copy the clean resources and presets to the build output directory
 add_custom_command(TARGET MilkDrop3 POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/resources"
+        "${CMAKE_CURRENT_SOURCE_DIR}/resources"
         "$<TARGET_FILE_DIR:MilkDrop3>/plugins/Milkdrop3"
     COMMENT "Copying MilkDrop3 resources and presets to the build directory..."
 )

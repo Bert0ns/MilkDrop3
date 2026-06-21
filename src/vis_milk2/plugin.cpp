@@ -2158,7 +2158,7 @@ int CPlugin::AllocateMyDX9Stuff()
 
 	/*if (m_bFixSlowText && !m_bSeparateTextWindow)
 	{
-        if (D3DXCreateTexture(GetDevice(), GetWidth(), GetHeight(), 1, D3DUSAGE_RENDERTARGET, GetBackBufFormat(), D3DPOOL_DEFAULT, &m_lpDDSText) != D3D_OK)
+        if (GetDevice()->CreateTexture(GetWidth(), GetHeight(), 1, D3DUSAGE_RENDERTARGET, GetBackBufFormat(), D3DPOOL_DEFAULT, &m_lpDDSText, NULL) != D3D_OK)
 		{
             char buf[2048];
 			dumpmsg("Init: -WARNING-:");
@@ -2191,7 +2191,7 @@ int CPlugin::AllocateMyDX9Stuff()
 
 		do
 		{
-			hr = D3DXCreateTexture(GetDevice(), m_nTitleTexSizeX, m_nTitleTexSizeY, 1, D3DUSAGE_RENDERTARGET, GetBackBufFormat(), D3DPOOL_DEFAULT, &m_lpDDSTitle);
+			hr = GetDevice()->CreateTexture(m_nTitleTexSizeX, m_nTitleTexSizeY, 1, D3DUSAGE_RENDERTARGET, GetBackBufFormat(), D3DPOOL_DEFAULT, &m_lpDDSTitle, NULL);
 			if (hr != D3D_OK)
 			{
 				if (m_nTitleTexSizeY < m_nTitleTexSizeX)
@@ -3164,12 +3164,12 @@ void CShaderParams::CacheParams(LPD3DXCONSTANTTABLE pCT, bool bHardErrors)
                             if (GetFileAttributesW(szFilename) == 0xFFFFFFFF)
                               continue;
                         }
-                        D3DXIMAGE_INFO desc;
+                        mdImageInfo desc;
 
                         // keep trying to load it - if it fails due to memory, evict something and try again.
                         while (1)
                         {
-                            HRESULT hr = D3DXCreateTextureFromFileExW(g_plugin.GetDevice(),
+                            HRESULT hr = mdCreateTextureFromFileExW(g_plugin.GetDevice(),
                                                                    szFilename,
                                                                    D3DX_DEFAULT_NONPOW2, // w
                                                                    D3DX_DEFAULT_NONPOW2, // h

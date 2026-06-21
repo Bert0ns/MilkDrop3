@@ -587,7 +587,7 @@ void CPluginShell::AllocateTextSurface()
 	int w = m_vjd3d9_device ? m_nTextWndWidth  : GetWidth() ;
 	int h = m_vjd3d9_device ? m_nTextWndHeight : GetHeight();
 
-	if (D3D_OK != D3DXCreateTexture(pDevice, w, h, 1, D3DUSAGE_RENDERTARGET, GetBackBufFormat(), D3DPOOL_DEFAULT, &m_lpDDSText))
+	if (D3D_OK != pDevice->CreateTexture(w, h, 1, D3DUSAGE_RENDERTARGET, GetBackBufFormat(), D3DPOOL_DEFAULT, &m_lpDDSText, NULL))
 		m_lpDDSText = NULL; // OK if there's not enough mem for it!
 	else
 	{
