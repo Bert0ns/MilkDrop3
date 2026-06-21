@@ -38,6 +38,7 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #endif
 #include <d3d9.h>
 #include <d3dx9.h>
+#include "md_math.h"
 
 #define SNAP_WINDOWED_MODE_BLOCKSIZE  32    // or use 0 if you don't want snapping
 

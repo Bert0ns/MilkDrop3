@@ -366,7 +366,7 @@ public:
         IDirect3DVertexDeclaration9* m_pWfVertDecl;
         IDirect3DVertexDeclaration9* m_pMyVertDecl;
 
-        D3DXVECTOR4 m_rand_frame;  // 4 random floats (0..1); randomized once per frame; fed to pixel shaders.
+        mdVector4 m_rand_frame;  // 4 random floats (0..1); randomized once per frame; fed to pixel shaders.
 
         // RUNTIME SETTINGS THAT WE'VE ADDED
         float       m_prev_time;

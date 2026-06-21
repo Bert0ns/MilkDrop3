@@ -1,0 +1,146 @@
+MD31=9239532140067554748
+MD32=835730228564062753
+MILKDROP_PRESET_VERSION=201
+PSVERSION=4
+PSVERSION_WARP=4
+PSVERSION_COMP=2
+[preset00]
+FFTAttack=0.500
+FFTDecay=0.500
+fRating=5.000
+fGammaAdj=1.460
+fDecay=0.935
+fVideoEchoZoom=1.007
+fVideoEchoAlpha=0.500
+nVideoEchoOrientation=2
+nWaveMode=9
+bAdditiveWaves=0
+bWaveDots=0
+bWaveThick=1
+bModWaveAlphaByVolume=1
+bMaximizeWaveColor=1
+bTexWrap=1
+bDarkenCenter=0
+bRedBlueStereo=0
+bBrighten=1
+bDarken=1
+bSolarize=0
+bInvert=0
+fWaveAlpha=0.280
+fWaveScale=0.420
+fWaveSmoothing=0.740
+fWaveParam=0.000
+fModWaveAlphaStart=1.060
+fModWaveAlphaEnd=1.540
+fWarpAnimSpeed=1.459
+fWarpScale=2.007
+fZoomExponent=1.00000
+fShader=1.000
+zoom=0.99990
+rot=0.00000
+cx=0.500
+cy=0.500
+dx=0.00000
+dy=0.00000
+warp=0.01000
+sx=0.99990
+sy=1.00000
+wave_r=0.650
+wave_g=0.650
+wave_b=0.650
+wave_x=0.500
+wave_y=0.380
+ob_size=0.015
+ob_r=0.000
+ob_g=0.000
+ob_b=1.000
+ob_a=0.000
+ib_size=0.260
+ib_r=0.250
+ib_g=0.250
+ib_b=0.250
+ib_a=0.000
+nMotionVectorsX=64.000
+nMotionVectorsY=48.000
+mv_dx=0.000
+mv_dy=0.000
+mv_l=0.000
+mv_r=1.000
+mv_g=1.000
+mv_b=1.000
+mv_a=0.000
+b1n=0.000
+b2n=0.000
+b3n=0.000
+b1x=1.000
+b2x=1.000
+b3x=1.000
+b1ed=0.250
+per_frame_1=dec_med = exp (-11/fps);
+per_frame_2=dec_slow = exp (-0.3/fps);
+per_frame_3=beat = max (max (bass, mid), treb); 
+per_frame_4=avg = avg*dec_slow + beat*(1-dec_slow);
+per_frame_5=is_beat = above(beat, .5+avg+peak) * above (time, t0+.2);
+per_frame_6=t0 = is_beat*time + (1-is_beat)*t0;
+per_frame_7=peak = is_beat * beat + (1-is_beat)*peak*dec_med;
+per_frame_8=index = (index + is_beat) %4;
+per_frame_9=index2 = (index2 + is_beat*bnot(index))%2;
+per_frame_10=
+per_frame_11=q20 = avg;
+per_frame_12=q21 = beat;
+per_frame_13=q22 = peak;
+per_frame_14=q23 = index;
+per_frame_15=q24 = is_beat;
+per_frame_16=q26 = bass_att + mid_att + treb_att;
+per_frame_17=q27 = index +1;
+per_frame_18=q28 = index2;
+per_frame_19=
+per_frame_20=
+per_frame_21=
+per_frame_22=k1 =  is_
+per_frame_23=beat*equal(index%2,0);
+per_frame_24=p1 =  k1*(p1+1) + (1-k1)*p1;
+per_frame_25=p2 = dec_med * p2+ (1-dec_med)*p1;
+per_frame_26=rott = p2 * 3.1416/4;
+per_frame_27=
+per_frame_28=q1 = cos(rott);
+per_frame_29=q2 = sin(rott);
+per_frame_30=q3 = -q2;
+per_frame_31=q4 = q1;
+per_frame_32=
+per_frame_33=alt = alt * .2 + q26*.8;
+per_frame_34=q26 = q26 - alt;
+per_frame_35=
+per_frame_36=step = step + 100*max(q26-0.01,0) + q24 ;
+per_frame_37=q30 = step;
+per_frame_38=
+per_frame_39=p4 = dec_med*p4 + (1-dec_med)*q27;
+per_frame_40=q31 = p4;
+per_frame_41=
+per_frame_42=//zoom = 1 + .05*q1;
+per_frame_43=//rot = -0.01 * (index);
+per_frame_44=zoom = 1;
+per_frame_45=rot = .003;
+per_frame_46=
+warp_1=`shader_body
+warp_2=`{
+warp_3=`// MilkDrop3: mrange - MilkDrop2077 - Reflective 4D Julia1
+warp_4=`// This shader will work only with md3 :)
+warp_5=`
+warp_6=`// Reflective 4D Julia by mrange:
+warp_7=`// https://www.shadertoy.com/view/msBXWK
+warp_8=`// Shoutout to him for the incredible code!
+warp_9=`
+warp_10=`// sample previous frame
+warp_11=`ret = tex2D(sampler_main, uv).xyz;
+warp_12=`
+warp_13=`// darken (decay) over time
+warp_14=`ret *= 0.94; //or try: ret -= 0.004;
+warp_15=`}
+comp_1=`shader_body
+comp_2=`{
+comp_3=`// MilkDrop3: mrange - MilkDrop2077 - Reflective 4D Julia1
+comp_4=`// This shader will work only with md3 :)
+comp_5=`
+comp_6=`ret = tex2D(sampler_main, uv).xyz;
+comp_7=`}

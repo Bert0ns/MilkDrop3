@@ -31,12 +31,13 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define __NULLSOFT_DX9_EXAMPLE_PLUGIN_SUPPORT_H__ 1
 
 #include <d3dx9.h>
+#include "md_math.h"
 
-void MakeWorldMatrix( D3DXMATRIX* pOut,
+void MakeWorldMatrix( mdMatrix* pOut,
                       float xpos, float ypos, float zpos,
                       float sx,   float sy,   float sz,
                       float pitch, float yaw, float roll);
-void MakeProjectionMatrix( D3DXMATRIX* pOut,
+void MakeProjectionMatrix( mdMatrix* pOut,
                            const float near_plane, // Distance to near clipping plane
                            const float far_plane,  // Distance to far clipping plane
                            const float fov_horiz,  // Horizontal field of view angle, in radians
@@ -48,9 +49,9 @@ void PrepareFor3DDrawing(
         float fov_in_degrees,
         float near_clip,
         float far_clip,
-        D3DXVECTOR3* pvEye,
-        D3DXVECTOR3* pvLookat,
-        D3DXVECTOR3* pvUp
+        mdVector3* pvEye,
+        mdVector3* pvLookat,
+        mdVector3* pvUp
     );
 void PrepareFor2DDrawing(IDirect3DDevice9 *pDevice);
 

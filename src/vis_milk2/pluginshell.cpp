@@ -1800,15 +1800,15 @@ void CPluginShell::PrepareFor2DDrawing_B(IDirect3DDevice9 *pDevice, int w, int h
 
 	// set up for 2D drawing:
 	{
-		D3DXMATRIX Ortho2D;
-		D3DXMATRIX Identity;
+		mdMatrix Ortho2D;
+		mdMatrix Identity;
 
-		D3DXMatrixOrthoLH(&Ortho2D, (float)w, (float)h, 0.0f, 1.0f);
-		D3DXMatrixIdentity(&Identity);
+		mdMatrixOrthoLH(&Ortho2D, (float)w, (float)h, 0.0f, 1.0f);
+		mdMatrixIdentity(&Identity);
 
-		pDevice->SetTransform(D3DTS_PROJECTION, &Ortho2D);
-		pDevice->SetTransform(D3DTS_WORLD, &Identity);
-		pDevice->SetTransform(D3DTS_VIEW, &Identity);
+		pDevice->SetTransform(D3DTS_PROJECTION, (const D3DMATRIX*)&Ortho2D);
+		pDevice->SetTransform(D3DTS_WORLD, (const D3DMATRIX*)&Identity);
+		pDevice->SetTransform(D3DTS_VIEW, (const D3DMATRIX*)&Identity);
 	}
 }
 

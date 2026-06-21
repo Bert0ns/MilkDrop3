@@ -35,7 +35,7 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <stdio.h>
 #include "texmgr.h"
 
-#include <d3dx9math.h> // for D3DXVECTOR3
+#include "md_math.h" // for mdVector3
 
 //#include "evallib/eval.h"
 #include "../ns-eel2/ns-eel.h"
@@ -356,10 +356,10 @@ public:
 
     // some random stuff for driving shaders:
     void         RandomizePresetVars();
-    D3DXVECTOR4  m_rand_preset; // 4 random floats (0..1); randomized @ preset load; fed to pixel shaders.  --FIXME (blending)
-    D3DXVECTOR3  m_xlate[20];
-    D3DXVECTOR3  m_rot_base[20];
-    D3DXVECTOR3  m_rot_speed[20];
+    mdVector4  m_rand_preset; // 4 random floats (0..1); randomized @ preset load; fed to pixel shaders.  --FIXME (blending)
+    mdVector3  m_xlate[20];
+    mdVector3  m_rot_base[20];
+    mdVector3  m_rot_speed[20];
 
 	//COscillator			m_waveR;
 	//COscillator			m_waveG;

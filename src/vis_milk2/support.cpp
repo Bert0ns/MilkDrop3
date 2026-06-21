@@ -41,9 +41,9 @@ void PrepareFor3DDrawing(
         float fov_in_degrees,
         float near_clip,
         float far_clip,
-        D3DXVECTOR3* pvEye,
-        D3DXVECTOR3* pvLookat,
-        D3DXVECTOR3* pvUp
+        mdVector3* pvEye,
+        mdVector3* pvLookat,
+        mdVector3* pvUp
     )
 {
     // This function sets up DirectX up for 3D rendering.
@@ -63,7 +63,7 @@ void PrepareFor3DDrawing(
     //    1. set the current texture (SetTexture)
     //    2. set up the texture stages for texturing (SetTextureStageState)
     //    3. set the current vertex format (SetVertexShader)
-    //    4. set up the world matrix (SetTransform(D3DTS_WORLD, &my_world_matrix))
+    //    4. set up the world matrix (SetTransform(D3DTS_WORLD, (const D3DMATRIX*)&my_world_matrix))
 
 
     // set up render state to some nice defaults:
@@ -111,20 +111,20 @@ void PrepareFor3DDrawing(
         if (far_clip < near_clip + 1.0f)
             far_clip = near_clip + 1.0f;
 
-        D3DXMATRIX proj;
+        mdMatrix proj;
         MakeProjectionMatrix(&proj, near_clip, far_clip, fov_x, fov_y);
-        pDevice->SetTransform(D3DTS_PROJECTION, &proj);
+        pDevice->SetTransform(D3DTS_PROJECTION, (const D3DMATRIX*)&proj);
 
-        D3DXMATRIX view;
-        D3DXMatrixLookAtLH(&view, pvEye, pvLookat, pvUp);
-        pDevice->SetTransform(D3DTS_VIEW, &view);
+        mdMatrix view;
+        mdMatrixLookAtLH(&view, pvEye, pvLookat, pvUp);
+        pDevice->SetTransform(D3DTS_VIEW, (const D3DMATRIX*)&view);
 
         // Optimization note: "You can minimize the number of required calculations
         // by concatenating your world and view matrices into a world-view matrix
         // that you set as the world matrix, and then setting the view matrix
         // to the identity."
-        //D3DXMatrixMultiply(&world, &world, &view);
-        //D3DXMatrixIdentity(&view);
+        //mdMatrixMultiply(&world, &world, &view);
+        //mdMatrixIdentity(&view);
     }
 }
 
@@ -173,21 +173,21 @@ void PrepareFor2DDrawing(IDirect3DDevice9 *pDevice)
 
     // set up for 2D drawing:
     {
-        D3DXMATRIX Ortho2D;
-        D3DXMATRIX Identity;
+        mdMatrix Ortho2D;
+        mdMatrix Identity;
 
-        D3DXMatrixOrthoLH(&Ortho2D, 2.0f, -2.0f, 0.0f, 1.0f);
-        D3DXMatrixIdentity(&Identity);
+        mdMatrixOrthoLH(&Ortho2D, 2.0f, -2.0f, 0.0f, 1.0f);
+        mdMatrixIdentity(&Identity);
 
-        pDevice->SetTransform(D3DTS_PROJECTION, &Ortho2D);
-        pDevice->SetTransform(D3DTS_WORLD, &Identity);
-        pDevice->SetTransform(D3DTS_VIEW, &Identity);
+        pDevice->SetTransform(D3DTS_PROJECTION, (const D3DMATRIX*)&Ortho2D);
+        pDevice->SetTransform(D3DTS_WORLD, (const D3DMATRIX*)&Identity);
+        pDevice->SetTransform(D3DTS_VIEW, (const D3DMATRIX*)&Identity);
     }
 }
 
 //---------------------------------------------------
 
-void MakeWorldMatrix( D3DXMATRIX* pOut,
+void MakeWorldMatrix( mdMatrix* pOut,
                       float xpos, float ypos, float zpos,
                       float sx,   float sy,   float sz,
                       float pitch, float yaw, float roll)
@@ -200,35 +200,35 @@ void MakeWorldMatrix( D3DXMATRIX* pOut,
      * angles, in radians.
      */
 
-    D3DXMATRIX MatTemp;
-    D3DXMatrixIdentity(pOut);
+    mdMatrix MatTemp;
+    mdMatrixIdentity(pOut);
 
     // 1. first, rotation
     if (pitch || yaw || roll)
     {
-        D3DXMATRIX MatRot;
-        D3DXMatrixIdentity(&MatRot);
+        mdMatrix MatRot;
+        mdMatrixIdentity(&MatRot);
 
-        D3DXMatrixRotationX(&MatTemp, pitch);         // Pitch
-        D3DXMatrixMultiply(&MatRot, &MatRot, &MatTemp);
-        D3DXMatrixRotationY(&MatTemp, yaw);           // Yaw
-        D3DXMatrixMultiply(&MatRot, &MatRot, &MatTemp);
-        D3DXMatrixRotationZ(&MatTemp, roll);          // Roll
-        D3DXMatrixMultiply(&MatRot, &MatRot, &MatTemp);
+        mdMatrixRotationX(&MatTemp, pitch);         // Pitch
+        mdMatrixMultiply(&MatRot, &MatRot, &MatTemp);
+        mdMatrixRotationY(&MatTemp, yaw);           // Yaw
+        mdMatrixMultiply(&MatRot, &MatRot, &MatTemp);
+        mdMatrixRotationZ(&MatTemp, roll);          // Roll
+        mdMatrixMultiply(&MatRot, &MatRot, &MatTemp);
 
-        D3DXMatrixMultiply(pOut, pOut, &MatRot);
+        mdMatrixMultiply(pOut, pOut, &MatRot);
     }
 
     // 2. then, scaling
-    D3DXMatrixScaling(&MatTemp, sx, sy, sz);
-    D3DXMatrixMultiply(pOut, pOut, &MatTemp);
+    mdMatrixScaling(&MatTemp, sx, sy, sz);
+    mdMatrixMultiply(pOut, pOut, &MatTemp);
 
     // 3. last, translation to final world pos.
-    D3DXMatrixTranslation(&MatTemp, xpos, ypos, zpos);
-    D3DXMatrixMultiply(pOut, pOut, &MatTemp);
+    mdMatrixTranslation(&MatTemp, xpos, ypos, zpos);
+    mdMatrixMultiply(pOut, pOut, &MatTemp);
 }
 
-void MakeProjectionMatrix( D3DXMATRIX* pOut,
+void MakeProjectionMatrix( mdMatrix* pOut,
                            const float near_plane, // Distance to near clipping plane
                            const float far_plane,  // Distance to far clipping plane
                            const float fov_horiz,  // Horizontal field of view angle, in radians
@@ -238,7 +238,7 @@ void MakeProjectionMatrix( D3DXMATRIX* pOut,
     float h = (float)1/tanf(fov_vert*0.5f);   // 1/tan(x) == cot(x)
     float Q = far_plane/(far_plane - near_plane);
 
-    ZeroMemory(pOut, sizeof(D3DXMATRIX));
+    ZeroMemory(pOut, sizeof(mdMatrix));
     pOut->_11 = w;
     pOut->_22 = h;
     pOut->_33 = Q;

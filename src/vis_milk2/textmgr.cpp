@@ -234,9 +234,9 @@ void CTextManager::DrawNow()
         
     if (m_nMsg[m_b] > 0 || m_nMsg[1-m_b] > 0)  // second condition req'd for clearing text in VJ mode
     {
-        D3DXMATRIX Ortho2D;    
-        D3DXMatrixOrthoLH(&Ortho2D, 2.0f, -2.0f, 0.0f, 1.0f);
-        m_lpDevice->SetTransform(D3DTS_PROJECTION, &Ortho2D);
+        mdMatrix Ortho2D;    
+        mdMatrixOrthoLH(&Ortho2D, 2.0f, -2.0f, 0.0f, 1.0f);
+        m_lpDevice->SetTransform(D3DTS_PROJECTION, (const D3DMATRIX*)&Ortho2D);
 
         #define NUM_DIRTY_RECTS 3
         RECT dirty_rect[NUM_DIRTY_RECTS];
@@ -684,9 +684,9 @@ void CTextManager::DrawNow()
         m_lpDevice->SetPixelShader( NULL );
         m_lpDevice->SetFVF( SPRITEVERTEX_FORMAT );
         
-        //D3DXMATRIX ident;    
-        //D3DXMatrixIdentity(&ident);
-        //m_lpDevice->SetTransform(D3DTS_PROJECTION, &ident);
+        //mdMatrix ident;    
+        //mdMatrixIdentity(&ident);
+        //m_lpDevice->SetTransform(D3DTS_PROJECTION, (const D3DMATRIX*)&ident);
     }
 
     // flip:

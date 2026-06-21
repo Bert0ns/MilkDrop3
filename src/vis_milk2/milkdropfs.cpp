@@ -776,7 +776,7 @@ void CPlugin::RenderFrame(int bRedraw)
 
     if (!bRedraw)
     {
-        m_rand_frame = D3DXVECTOR4(FRAND, FRAND, FRAND, FRAND);
+        m_rand_frame = mdVector4(FRAND, FRAND, FRAND, FRAND);
 
 	    // randomly change the preset, if it's time
 	    if (m_fNextPresetTime < GetTime())
@@ -1604,7 +1604,7 @@ void CPlugin::BlurPasses()
 
             int srcw = (i==0) ? GetWidth() : m_nBlurTexW[i-1];
             int srch = (i==0) ? GetHeight() : m_nBlurTexH[i-1];
-            D3DXVECTOR4 srctexsize = D3DXVECTOR4( (float)srcw, (float)srch, 1.0f/(float)srcw, 1.0f/(float)srch );
+            mdVector4 srctexsize = mdVector4( (float)srcw, (float)srch, 1.0f/(float)srcw, 1.0f/(float)srch );
 
             float fscale_now = fscale[i/2];
             float fbias_now  = fbias[i/2];
@@ -1628,10 +1628,10 @@ void CPlugin::BlurPasses()
                 //float4 _c2; // d1..d4
                 //float4 _c3; // scale, bias, w_div, 0
                 //-------------------------------------
-                if (h[0]) pCT->SetVector( lpDevice, h[0], &srctexsize );
-                if (h[1]) pCT->SetVector( lpDevice, h[1], &D3DXVECTOR4( w1,w2,w3,w4 ));
-                if (h[2]) pCT->SetVector( lpDevice, h[2], &D3DXVECTOR4( d1,d2,d3,d4 ));
-                if (h[3]) pCT->SetVector( lpDevice, h[3], &D3DXVECTOR4( fscale_now,fbias_now,w_div,0));
+                if (h[0]) mdSetVector(pCT,  lpDevice, h[0], &srctexsize );
+                if (h[1]) mdSetVector(pCT,  lpDevice, h[1], &mdVector4( w1,w2,w3,w4 ));
+                if (h[2]) mdSetVector(pCT,  lpDevice, h[2], &mdVector4( d1,d2,d3,d4 ));
+                if (h[3]) mdSetVector(pCT,  lpDevice, h[3], &mdVector4( fscale_now,fbias_now,w_div,0));
             }
             else
             {
@@ -1647,16 +1647,16 @@ void CPlugin::BlurPasses()
                 //float4 _c5; // w1,w2,d1,d2
                 //float4 _c6; // w_div, edge_darken_c1, edge_darken_c2, edge_darken_c3
                 //-------------------------------------
-                if (h[0]) pCT->SetVector( lpDevice, h[0], &srctexsize );
-                if (h[5]) pCT->SetVector( lpDevice, h[5], &D3DXVECTOR4( w1,w2,d1,d2 ));
+                if (h[0]) mdSetVector(pCT,  lpDevice, h[0], &srctexsize );
+                if (h[5]) mdSetVector(pCT,  lpDevice, h[5], &mdVector4( w1,w2,d1,d2 ));
                 if (h[6])
                 {
                     // note: only do this first time; if you do it many times,
                     // then the super-blurred levels will have big black lines along the top & left sides.
                     if (i==1)
-                        pCT->SetVector( lpDevice, h[6], &D3DXVECTOR4( w_div,(1-edge_darken),edge_darken,5.0f )); //darken edges
+                        mdSetVector(pCT,  lpDevice, h[6], &mdVector4( w_div,(1-edge_darken),edge_darken,5.0f )); //darken edges
                     else
-                        pCT->SetVector( lpDevice, h[6], &D3DXVECTOR4( w_div,1.0f,0.0f,5.0f )); // don't darken
+                        mdSetVector(pCT,  lpDevice, h[6], &mdVector4( w_div,1.0f,0.0f,5.0f )); // don't darken
                 }
             }
 
@@ -3857,7 +3857,7 @@ void CPlugin::ApplyShaderParams(CShaderParams* p, LPD3DXCONSTANTTABLE pCT, CStat
     for (i=0; i<N; i++)
     {
         TexSizeParamInfo* q = &(p->texsize_params[i]);
-        pCT->SetVector( lpDevice, q->texsize_param, &D3DXVECTOR4((float)q->w,(float)q->h,1.0f/q->w,1.0f/q->h));
+        mdSetVector(pCT,  lpDevice, q->texsize_param, &mdVector4((float)q->w,(float)q->h,1.0f/q->w,1.0f/q->h));
     }
 
     float time_since_preset_start = GetTime() - pState->GetPresetStartTime();
@@ -3878,46 +3878,46 @@ void CPlugin::ApplyShaderParams(CShaderParams* p, LPD3DXCONSTANTTABLE pCT, CStat
     GetSafeBlurMinMax(pState, blur_min, blur_max);
 
     // bind float4's
-    if (p->rand_frame ) pCT->SetVector( lpDevice, p->rand_frame , &m_rand_frame );
-    if (p->rand_preset) pCT->SetVector( lpDevice, p->rand_preset, &pState->m_rand_preset );
+    if (p->rand_frame ) mdSetVector(pCT,  lpDevice, p->rand_frame , &m_rand_frame );
+    if (p->rand_preset) mdSetVector(pCT,  lpDevice, p->rand_preset, &pState->m_rand_preset );
     D3DXHANDLE* h = p->const_handles;
-    if (h[0]) pCT->SetVector( lpDevice, h[0], &D3DXVECTOR4( aspect_x, aspect_y, 1.0f/aspect_x, 1.0f/aspect_y ));
-    if (h[1]) pCT->SetVector( lpDevice, h[1], &D3DXVECTOR4(0, 0, 0, 0 ));
-    if (h[2]) pCT->SetVector( lpDevice, h[2], &D3DXVECTOR4(time_since_preset_start_wrapped, GetFps(), (float)GetFrame(), progress));
-    if (h[3]) pCT->SetVector( lpDevice, h[3], &D3DXVECTOR4(mysound.imm_rel[0], mysound.imm_rel[1], mysound.imm_rel[2], 0.3333f*(mysound.imm_rel[0], mysound.imm_rel[1], mysound.imm_rel[2]) ));
-    if (h[4]) pCT->SetVector( lpDevice, h[4], &D3DXVECTOR4(mysound.avg_rel[0], mysound.avg_rel[1], mysound.avg_rel[2], 0.3333f*(mysound.avg_rel[0], mysound.avg_rel[1], mysound.avg_rel[2]) ));
-    if (h[5]) pCT->SetVector( lpDevice, h[5], &D3DXVECTOR4( blur_max[0]-blur_min[0], blur_min[0], blur_max[1]-blur_min[1], blur_min[1] ));
-    if (h[6]) pCT->SetVector( lpDevice, h[6], &D3DXVECTOR4( blur_max[2]-blur_min[2], blur_min[2], blur_min[0], blur_max[0] ));
-    if (h[7]) pCT->SetVector( lpDevice, h[7], &D3DXVECTOR4((float)m_nTexSizeX, (float)m_nTexSizeY, 1.0f/(float)m_nTexSizeX, 1.0f/(float)m_nTexSizeY ));
-    if (h[8]) pCT->SetVector( lpDevice, h[8], &D3DXVECTOR4( 0.5f+0.5f*cosf(time* 0.329f+1.2f),
+    if (h[0]) mdSetVector(pCT,  lpDevice, h[0], &mdVector4( aspect_x, aspect_y, 1.0f/aspect_x, 1.0f/aspect_y ));
+    if (h[1]) mdSetVector(pCT,  lpDevice, h[1], &mdVector4(0, 0, 0, 0 ));
+    if (h[2]) mdSetVector(pCT,  lpDevice, h[2], &mdVector4(time_since_preset_start_wrapped, GetFps(), (float)GetFrame(), progress));
+    if (h[3]) mdSetVector(pCT,  lpDevice, h[3], &mdVector4(mysound.imm_rel[0], mysound.imm_rel[1], mysound.imm_rel[2], 0.3333f*(mysound.imm_rel[0], mysound.imm_rel[1], mysound.imm_rel[2]) ));
+    if (h[4]) mdSetVector(pCT,  lpDevice, h[4], &mdVector4(mysound.avg_rel[0], mysound.avg_rel[1], mysound.avg_rel[2], 0.3333f*(mysound.avg_rel[0], mysound.avg_rel[1], mysound.avg_rel[2]) ));
+    if (h[5]) mdSetVector(pCT,  lpDevice, h[5], &mdVector4( blur_max[0]-blur_min[0], blur_min[0], blur_max[1]-blur_min[1], blur_min[1] ));
+    if (h[6]) mdSetVector(pCT,  lpDevice, h[6], &mdVector4( blur_max[2]-blur_min[2], blur_min[2], blur_min[0], blur_max[0] ));
+    if (h[7]) mdSetVector(pCT,  lpDevice, h[7], &mdVector4((float)m_nTexSizeX, (float)m_nTexSizeY, 1.0f/(float)m_nTexSizeX, 1.0f/(float)m_nTexSizeY ));
+    if (h[8]) mdSetVector(pCT,  lpDevice, h[8], &mdVector4( 0.5f+0.5f*cosf(time* 0.329f+1.2f),
                                                               0.5f+0.5f*cosf(time* 1.293f+3.9f),
                                                               0.5f+0.5f*cosf(time* 5.070f+2.5f),
                                                               0.5f+0.5f*cosf(time*20.051f+5.4f)
         ));
-    if (h[9]) pCT->SetVector( lpDevice, h[9], &D3DXVECTOR4( 0.5f+0.5f*sinf(time* 0.329f+1.2f),
+    if (h[9]) mdSetVector(pCT,  lpDevice, h[9], &mdVector4( 0.5f+0.5f*sinf(time* 0.329f+1.2f),
                                                               0.5f+0.5f*sinf(time* 1.293f+3.9f),
                                                               0.5f+0.5f*sinf(time* 5.070f+2.5f),
                                                               0.5f+0.5f*sinf(time*20.051f+5.4f)
         ));
-    if (h[10]) pCT->SetVector( lpDevice, h[10], &D3DXVECTOR4( 0.5f+0.5f*cosf(time*0.0050f+2.7f),
+    if (h[10]) mdSetVector(pCT,  lpDevice, h[10], &mdVector4( 0.5f+0.5f*cosf(time*0.0050f+2.7f),
                                                                 0.5f+0.5f*cosf(time*0.0085f+5.3f),
                                                                 0.5f+0.5f*cosf(time*0.0133f+4.5f),
                                                                 0.5f+0.5f*cosf(time*0.0217f+3.8f)
         ));
-    if (h[11]) pCT->SetVector( lpDevice, h[11], &D3DXVECTOR4( 0.5f+0.5f*sinf(time*0.0050f+2.7f),
+    if (h[11]) mdSetVector(pCT,  lpDevice, h[11], &mdVector4( 0.5f+0.5f*sinf(time*0.0050f+2.7f),
                                                                 0.5f+0.5f*sinf(time*0.0085f+5.3f),
                                                                 0.5f+0.5f*sinf(time*0.0133f+4.5f),
                                                                 0.5f+0.5f*sinf(time*0.0217f+3.8f)
         ));
-    if (h[12]) pCT->SetVector( lpDevice, h[12], &D3DXVECTOR4( mip_x, mip_y, mip_avg, 0 ));
-    if (h[13]) pCT->SetVector( lpDevice, h[13], &D3DXVECTOR4( blur_min[1], blur_max[1], blur_min[2], blur_max[2] ));
+    if (h[12]) mdSetVector(pCT,  lpDevice, h[12], &mdVector4( mip_x, mip_y, mip_avg, 0 ));
+    if (h[13]) mdSetVector(pCT,  lpDevice, h[13], &mdVector4( blur_min[1], blur_max[1], blur_min[2], blur_max[2] ));
 
     // write q vars
     int num_q_float4s = sizeof(p->q_const_handles)/sizeof(p->q_const_handles[0]);
     for (i=0; i<num_q_float4s; i++)
     {
         if (p->q_const_handles[i])
-            pCT->SetVector( lpDevice, p->q_const_handles[i], &D3DXVECTOR4(
+            mdSetVector(pCT,  lpDevice, p->q_const_handles[i], &mdVector4(
                 (float)*pState->var_pf_q[i*4+0],
                 (float)*pState->var_pf_q[i*4+1],
                 (float)*pState->var_pf_q[i*4+2],
@@ -3929,18 +3929,18 @@ void CPlugin::ApplyShaderParams(CShaderParams* p, LPD3DXCONSTANTTABLE pCT, CStat
     {
         if (p->rot_mat[i])
         {
-            D3DXMATRIX mx,my,mz,mxlate,temp;
+            mdMatrix mx,my,mz,mxlate,temp;
 
-            D3DXMatrixRotationX(&mx, pState->m_rot_base[i].x + pState->m_rot_speed[i].x*time);
-            D3DXMatrixRotationY(&my, pState->m_rot_base[i].y + pState->m_rot_speed[i].y*time);
-            D3DXMatrixRotationZ(&mz, pState->m_rot_base[i].z + pState->m_rot_speed[i].z*time);
-            D3DXMatrixTranslation(&mxlate, pState->m_xlate[i].x, pState->m_xlate[i].y, pState->m_xlate[i].z);
+            mdMatrixRotationX(&mx, pState->m_rot_base[i].x + pState->m_rot_speed[i].x*time);
+            mdMatrixRotationY(&my, pState->m_rot_base[i].y + pState->m_rot_speed[i].y*time);
+            mdMatrixRotationZ(&mz, pState->m_rot_base[i].z + pState->m_rot_speed[i].z*time);
+            mdMatrixTranslation(&mxlate, pState->m_xlate[i].x, pState->m_xlate[i].y, pState->m_xlate[i].z);
 
-            D3DXMatrixMultiply(&temp, &mx, &mxlate);
-            D3DXMatrixMultiply(&temp, &temp, &mz);
-            D3DXMatrixMultiply(&temp, &temp, &my);
+            mdMatrixMultiply(&temp, &mx, &mxlate);
+            mdMatrixMultiply(&temp, &temp, &mz);
+            mdMatrixMultiply(&temp, &temp, &my);
 
-            pCT->SetMatrix(lpDevice, p->rot_mat[i], &temp);
+            mdSetMatrix(pCT, lpDevice, p->rot_mat[i], &temp);
         }
     }
     // the last 4 are totally random, each frame
@@ -3948,18 +3948,18 @@ void CPlugin::ApplyShaderParams(CShaderParams* p, LPD3DXCONSTANTTABLE pCT, CStat
     {
         if (p->rot_mat[i])
         {
-            D3DXMATRIX mx,my,mz,mxlate,temp;
+            mdMatrix mx,my,mz,mxlate,temp;
 
-            D3DXMatrixRotationX(&mx, FRAND * 6.28f);
-            D3DXMatrixRotationY(&my, FRAND * 6.28f);
-            D3DXMatrixRotationZ(&mz, FRAND * 6.28f);
-            D3DXMatrixTranslation(&mxlate, FRAND, FRAND, FRAND);
+            mdMatrixRotationX(&mx, FRAND * 6.28f);
+            mdMatrixRotationY(&my, FRAND * 6.28f);
+            mdMatrixRotationZ(&mz, FRAND * 6.28f);
+            mdMatrixTranslation(&mxlate, FRAND, FRAND, FRAND);
 
-            D3DXMatrixMultiply(&temp, &mx, &mxlate);
-            D3DXMatrixMultiply(&temp, &temp, &mz);
-            D3DXMatrixMultiply(&temp, &temp, &my);
+            mdMatrixMultiply(&temp, &mx, &mxlate);
+            mdMatrixMultiply(&temp, &temp, &mz);
+            mdMatrixMultiply(&temp, &temp, &my);
 
-            pCT->SetMatrix(lpDevice, p->rot_mat[i], &temp);
+            mdSetMatrix(pCT, lpDevice, p->rot_mat[i], &temp);
         }
     }
 }
