@@ -46,6 +46,14 @@ set(SOURCES
     src/vis_milk2/plugin.rc
 )
 
+# Handle MSVC-specific requirements (legacy scoping, 32-bit architecture)
+if(MSVC)
+    add_compile_options(/Zc:forScope-)
+    if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+        message(FATAL_ERROR "MilkDrop 3 uses 32-bit inline assembly (__asm) and cannot be compiled for 64-bit. Please delete your build folder and run: cmake -A Win32 ..")
+    endif()
+endif()
+
 # We want an executable
 add_executable(MilkDrop3 WIN32 ${SOURCES})
 
