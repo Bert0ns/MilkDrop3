@@ -3,10 +3,10 @@
 - How to download and install : https://youtu.be/OQdZFlOHe5o<br/>
 - How to create a double-preset : https://youtu.be/AdcUPpp1O0k<br/>
 
-<img align="left" width="300" height="316" src="https://github.com/milkdrop2077/MilkDrop3/raw/main/MilkDrop326a.jpg">
-<img  width="300" height="316" src="https://github.com/milkdrop2077/MilkDrop3/raw/main/MilkDrop326b.jpg">
-<img align="left" width="300" height="316" src="https://github.com/milkdrop2077/MilkDrop3/raw/main/MilkDrop326c.jpg">
-<img  width="300" height="316" src="https://github.com/milkdrop2077/MilkDrop3/raw/main/MilkDrop326d.jpg">
+<img align="left" width="300" height="316" src="docs/MilkDrop326a.jpg">
+<img  width="300" height="316" src="docs/MilkDrop326b.jpg">
+<img align="left" width="300" height="316" src="docs/MilkDrop326c.jpg">
+<img  width="300" height="316" src="docs/MilkDrop326d.jpg">
 
 MilkDrop 3 is a portable program that supports any audio source (Spotify, YouTube, SoundCloud, Winamp...)<br/>
 It is based on BeatDrop from Maxim Volskiy, so it's 100% compatible with any presets created with MilkDrop and projectM.<br/>
@@ -18,7 +18,7 @@ You can create new presets by pressing just a few keys, without knowing any line
 Create new colors by pressing just the key 'c' https://twitter.com/MilkDrop2077/status/1614526230929498113<br/>
 Also I created a new mode for auto-changing the presets based on beat detection.<br/>
 Here is a fast version of that: https://www.youtube.com/watch?v=pSzdThg1iW8<br/><br/>
-<img src="https://github.com/milkdrop2077/MilkDrop3/raw/main/MilkDrop3.jpg" width="600" />
+<img src="docs/MilkDrop3.jpg" width="600" />
 
 - Lots of new key shortcuts, see the whole list above.<br/>
 For some letters, the majuscule and minuscule matters.<br/>
@@ -112,7 +112,7 @@ I've setup up a patreon page, I've spend countless hours on MilkDrop3, if you wo
 https://www.patreon.com/MilkDrop3<br/>
 https://www.buymeacoffee.com/MilkDrop2077/<br/>
 
-<img src="https://github.com/milkdrop2077/MilkDrop3/raw/main/MilkDrop32.jpg" width="600" />
+<img src="docs/MilkDrop32.jpg" width="600" />
 
 # History:
 
