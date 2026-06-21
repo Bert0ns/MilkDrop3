@@ -46,6 +46,9 @@ set(SOURCES
     src/vis_milk2/plugin.rc
 )
 
+# Force all C files to compile as C++ to avoid MSVC C2099 constant initializer errors
+set_source_files_properties(${SOURCES} PROPERTIES LANGUAGE CXX)
+
 # Handle MSVC-specific requirements (legacy scoping, 32-bit architecture)
 if(MSVC)
     add_compile_options(/Zc:forScope-)
