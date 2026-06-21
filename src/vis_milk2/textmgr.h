@@ -34,8 +34,9 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     #define D3D_DEBUG_INFO  // declare this before including d3d9.h
 #endif
 #include <d3d9.h>
-#include <d3dx9.h>
+
 #include "md_defines.h"
+#include "md_font.h"
 #include "AutoWide.h"
 
 #define MAX_MSGS 4096

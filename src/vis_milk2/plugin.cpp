@@ -986,9 +986,9 @@ void CPlugin::MyPreInitialize()
     m_nMaxBytes  = 2000000000;
 
     #ifdef _DEBUG
-        m_dwShaderFlags = D3DXSHADER_DEBUG|(1<<16);
+        m_dwShaderFlags = D3DCOMPILE_DEBUG | D3DCOMPILE_ENABLE_BACKWARDS_COMPATIBILITY;
     #else
-        m_dwShaderFlags = (1<<16);//D3DXSHADER_SKIPOPTIMIZATION|D3DXSHADER_NO_PRESHADER;
+        m_dwShaderFlags = D3DCOMPILE_OPTIMIZATION_LEVEL3 | D3DCOMPILE_ENABLE_BACKWARDS_COMPATIBILITY;
     #endif
     //m_pFragmentLinker = NULL;
     //m_pCompiledFragments = NULL;
@@ -2236,7 +2236,7 @@ int CPlugin::AllocateMyDX9Stuff()
         return false;
     }
 
-	if (D3DXCreateFontW(	GetDevice(),
+	if (mdCreateFontW(	GetDevice(),
 						songtitle_font_size,
 						0,
 						m_fontinfo[SONGTITLE_FONT].bBold ? 900 : 400,

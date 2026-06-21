@@ -64,6 +64,6 @@ inline float mdVec3Dot(const mdVector3* pV1, const mdVector3* pV2) {
     return DirectX::XMVectorGetX(DirectX::XMVector3Dot(v1, v2));
 }
 
-#define mdSetVector(pCT, device, handle, pVector) (pCT)->SetVector((device), (handle), (const D3DXVECTOR4*)(pVector))
-#define mdSetMatrix(pCT, device, handle, pMatrix) (pCT)->SetMatrix((device), (handle), (const D3DXMATRIX*)(pMatrix))
+#define mdSetVector(pCT, device, handle, pVector) (pCT)->SetVector((device), (handle), (const mdVector4*)(pVector))
+#define mdSetMatrix(pCT, device, handle, pMatrix) (pCT)->SetMatrix((device), (handle), (const mdMatrix*)(pMatrix))
 

@@ -125,7 +125,7 @@ int CTextManager::DrawText(LPD3DXFONT pFont, char* szText, RECT* pRect, DWORD fl
         return 0;
         
     if (flags & DT_CALCRECT)
-        return pFont->DrawText(NULL, szText, -1, pRect, flags, color);
+        return pFont->mdDrawTextA(NULL, szText, -1, pRect, flags, color);
 
     if (!m_lpDevice /*|| !m_lpTextSurface*/) 
         return 0;
@@ -145,7 +145,7 @@ int CTextManager::DrawText(LPD3DXFONT pFont, char* szText, RECT* pRect, DWORD fl
         m_msg[m_b][m_nMsg[m_b]].bgColor = boxColor;
 
         // shrink rects on new frame's text strings; important for deletions
-        int h = pFont->DrawText(NULL, szText, len, &m_msg[m_b][m_nMsg[m_b]].rect, flags | DT_CALCRECT, color);
+        int h = pFont->mdDrawTextA(NULL, szText, len, &m_msg[m_b][m_nMsg[m_b]].rect, flags | DT_CALCRECT, color);
 
         m_nMsg[m_b]++;
         m_next_msg_start_ptr += len + 1;
@@ -164,7 +164,7 @@ int CTextManager::DrawText(LPD3DXFONT pFont, char* szText, RECT* pRect, DWORD fl
 
     // no room for more text? ok, but still return accurate info:
     RECT r2 = *pRect;
-    int h = pFont->DrawText(NULL, szText, len, &r2, flags | DT_CALCRECT, color);
+    int h = pFont->mdDrawTextA(NULL, szText, len, &r2, flags | DT_CALCRECT, color);
     return h;
 }
 
@@ -177,7 +177,7 @@ int CTextManager::DrawTextW(LPD3DXFONT pFont, wchar_t* szText, RECT* pRect, DWOR
         return 0;
         
     if (flags & DT_CALCRECT)
-        return pFont->DrawTextW(NULL, szText, -1, pRect, flags, color);
+        return pFont->mdDrawTextW(NULL, szText, -1, pRect, flags, color);
 
     if (!m_lpDevice /*|| !m_lpTextSurface*/) 
         return 0;
@@ -197,7 +197,7 @@ int CTextManager::DrawTextW(LPD3DXFONT pFont, wchar_t* szText, RECT* pRect, DWOR
         m_msg[m_b][m_nMsg[m_b]].bgColor = boxColor;
 
         // shrink rects on new frame's text strings; important for deletions
-        int h = pFont->DrawTextW(NULL, szText, len, &m_msg[m_b][m_nMsg[m_b]].rect, flags | DT_CALCRECT, color);
+        int h = pFont->mdDrawTextW(NULL, szText, len, &m_msg[m_b][m_nMsg[m_b]].rect, flags | DT_CALCRECT, color);
 
         m_nMsg[m_b]++;
         m_next_msg_start_ptr += len + 1;
@@ -216,7 +216,7 @@ int CTextManager::DrawTextW(LPD3DXFONT pFont, wchar_t* szText, RECT* pRect, DWOR
 
     // no room for more text? ok, but still return accurate info:
     RECT r2 = *pRect;
-    int h = pFont->DrawTextW(NULL, szText, len, &r2, flags | DT_CALCRECT, color);
+    int h = pFont->mdDrawTextW(NULL, szText, len, &r2, flags | DT_CALCRECT, color);
     return h;
 }
 
@@ -602,7 +602,7 @@ void CTextManager::DrawNow()
                 if (bRedrawText==2 || m_msg[m_b][i].added==1)
                     if (m_msg[m_b][i].pfont) // dark boxes have pfont==NULL
                         // warning: in DX9, the DT_WORD_ELLIPSIS and DT_NOPREFIX flags cause no text to render!!
-                        m_msg[m_b][i].pfont->DrawTextW(NULL, m_msg[m_b][i].msg, -1, &m_msg[m_b][i].rect, m_msg[m_b][i].flags, m_msg[m_b][i].color);
+                        m_msg[m_b][i].pfont->mdDrawTextW(NULL, m_msg[m_b][i].msg, -1, &m_msg[m_b][i].rect, m_msg[m_b][i].flags, m_msg[m_b][i].color);
                     else if (m_msg[m_b][i].added || bRedrawText==2 || !bRTT)
                     {
 	                    WFVERTEX v3[4];

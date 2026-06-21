@@ -542,7 +542,7 @@ int CPluginShell::AllocateFonts(IDirect3DDevice9* pDevice)
 {
 	// Create D3DX system font:
 	for (int i=0; i<NUM_BASIC_FONTS + NUM_EXTRA_FONTS; i++)
-		if (D3DXCreateFontW(pDevice,  //m_font[i],
+		if (mdCreateFontW(pDevice,  //m_font[i],
 		                   m_fontinfo[i].nSize,
 		                   m_fontinfo[i].nSize*4/10,
 		                   m_fontinfo[i].bBold ? 900 : 400,
@@ -568,7 +568,7 @@ int CPluginShell::AllocateFonts(IDirect3DDevice9* pDevice)
 	{
 		RECT r;
 		SetRect(&r, 0, 0, 1024, 1024);
-		int h = m_d3dx_font[i]->DrawText(NULL, "M", -1, &r, DT_CALCRECT, 0xFFFFFFFF);
+		int h = m_d3dx_font[i]->mdDrawTextA(NULL, "M", -1, &r, DT_CALCRECT, 0xFFFFFFFF);
 		if (h>0) m_fontinfo[i].nSize = h;
 	}
 
@@ -1867,9 +1867,9 @@ void CPluginShell::RenderBuiltInTextMsgs()
 
 			SetRect(&r, 0, 0, GetWidth(), GetHeight());
 			if(!g_szHelp_W)
-				m_d3dx_font[HELPSCREEN_FONT]->DrawTextA(NULL, (char*)g_szHelp, -1, &r, DT_CALCRECT, 0xFFFFFFFF);
+				m_d3dx_font[HELPSCREEN_FONT]->mdDrawTextA(NULL, (char*)g_szHelp, -1, &r, DT_CALCRECT, 0xFFFFFFFF);
 			else
-				m_d3dx_font[HELPSCREEN_FONT]->DrawTextW(NULL, g_szHelp, -1, &r, DT_CALCRECT, 0xFFFFFFFF);
+				m_d3dx_font[HELPSCREEN_FONT]->mdDrawTextW(NULL, g_szHelp, -1, &r, DT_CALCRECT, 0xFFFFFFFF);
 
 			r.top += m_upper_left_corner_y;
 			r.left += m_left_edge;
@@ -1882,9 +1882,9 @@ void CPluginShell::RenderBuiltInTextMsgs()
 			r.right -= PLAYLIST_INNER_MARGIN;
 			r.bottom -= PLAYLIST_INNER_MARGIN;
 			if(!g_szHelp_W)
-				m_d3dx_font[HELPSCREEN_FONT]->DrawTextA(NULL, (char*)g_szHelp, -1, &r, 0, 0xFFFFFFFF);
+				m_d3dx_font[HELPSCREEN_FONT]->mdDrawTextA(NULL, (char*)g_szHelp, -1, &r, 0, 0xFFFFFFFF);
 			else
-				m_d3dx_font[HELPSCREEN_FONT]->DrawTextW(NULL, g_szHelp, -1, &r, 0, 0xFFFFFFFF);
+				m_d3dx_font[HELPSCREEN_FONT]->mdDrawTextW(NULL, g_szHelp, -1, &r, 0, 0xFFFFFFFF);
 
 			m_upper_left_corner_y += r.bottom-r.top + PLAYLIST_INNER_MARGIN*3;
 		}
@@ -1894,7 +1894,7 @@ void CPluginShell::RenderBuiltInTextMsgs()
 		{
 			int dx = (int)(160.0f * powf(m_time/(float)(PRESS_F1_DUR), (float)(PRESS_F1_EXP)));
 			SetRect(&r, m_left_edge, m_lower_right_corner_y - GetFontHeight(DECORATIVE_FONT), m_right_edge + dx, m_lower_right_corner_y);
-			m_lower_right_corner_y -= m_d3dx_font[DECORATIVE_FONT]->DrawTextW(NULL, wasabiApiLangString(IDS_PRESS_F1_MSG), -1, &r, DT_RIGHT, 0xFFFFFFFF);
+			m_lower_right_corner_y -= m_d3dx_font[DECORATIVE_FONT]->mdDrawTextW(NULL, wasabiApiLangString(IDS_PRESS_F1_MSG), -1, &r, DT_RIGHT, 0xFFFFFFFF);
 		}
 	}
 }
@@ -1978,7 +1978,7 @@ void CPluginShell::RenderPlaylist()
 						//sprintf(m_playlist[i], "%d. %s ", j+1, buf);  // leave an extra space @ end, so italicized fonts don't get clipped
 
 						SetRect(&r, 0, 0, max_w, 1024);
-						m_d3dx_font[PLAYLIST_FONT]->DrawTextW(NULL, m_playlist[i], -1, &r, dwFlags | DT_CALCRECT, 0xFFFFFFFF);
+						m_d3dx_font[PLAYLIST_FONT]->mdDrawTextW(NULL, m_playlist[i], -1, &r, dwFlags | DT_CALCRECT, 0xFFFFFFFF);
 						int w = r.right-r.left;
 						if (w>0)
 							m_playlist_width_pixels = max(m_playlist_width_pixels, w);
@@ -2023,7 +2023,7 @@ void CPluginShell::RenderPlaylist()
 					        (i==now_playing ? PLAYLIST_COLOR_BOTH : PLAYLIST_COLOR_HILITE_TRACK) :
 							        (i==now_playing ? PLAYLIST_COLOR_PLAYING_TRACK : PLAYLIST_COLOR_NORMAL);
 
-				y += m_d3dx_font[PLAYLIST_FONT]->DrawTextW(NULL, m_playlist[i-start], -1, &r, dwFlags, color);
+				y += m_d3dx_font[PLAYLIST_FONT]->mdDrawTextW(NULL, m_playlist[i-start], -1, &r, dwFlags, color);
 			}
 
 			//m_d3dx_font[PLAYLIST_FONT]->End();

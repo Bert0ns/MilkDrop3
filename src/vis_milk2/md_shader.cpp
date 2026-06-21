@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include <stdio.h>
+#include <DirectXMath.h>
 
 #pragma pack(push, 1)
 struct CTABHeader {
@@ -136,10 +137,15 @@ public:
         UINT regIdx = m_constants[index].RegisterIndex;
         UINT regCount = m_constants[index].RegisterCount; // matrix is usually 4
         
+        DirectX::XMMATRIX mat = DirectX::XMLoadFloat4x4((const DirectX::XMFLOAT4X4*)pMatrix);
+        mat = DirectX::XMMatrixTranspose(mat);
+        DirectX::XMFLOAT4X4 transposed;
+        DirectX::XMStoreFloat4x4(&transposed, mat);
+        
         if (m_isPS) {
-            return pDevice->SetPixelShaderConstantF(regIdx, (const float*)pMatrix, regCount);
+            return pDevice->SetPixelShaderConstantF(regIdx, (const float*)&transposed, regCount);
         } else {
-            return pDevice->SetVertexShaderConstantF(regIdx, (const float*)pMatrix, regCount);
+            return pDevice->SetVertexShaderConstantF(regIdx, (const float*)&transposed, regCount);
         }
     }
 
@@ -171,6 +177,11 @@ HRESULT mdCompileShader(
     ID3DBlob* pCode = nullptr;
     HRESULT hr = D3DCompile(pSrcData, SrcDataLen, NULL, (const D3D_SHADER_MACRO*)pDefines, (ID3DInclude*)pInclude, pFunctionName, pProfile, Flags, 0, &pCode, ppErrorMsgs);
     if (FAILED(hr)) return hr;
+    
+    if (ppErrorMsgs && *ppErrorMsgs) {
+        (*ppErrorMsgs)->Release();
+        *ppErrorMsgs = nullptr;
+    }
     
     if (ppShader) {
         *ppShader = pCode;

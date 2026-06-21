@@ -32,6 +32,8 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "shell_defines.h"
 #include "dxcontext.h"
+#include "md_math.h"
+#include "md_font.h"
 #include "fft.h"
 #include "defines.h"
 #include "textmgr.h"

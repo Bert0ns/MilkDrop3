@@ -50,19 +50,11 @@ The application compiles `.fx` HLSL files dynamically at runtime using `D3DXComp
 
 ---
 
-## Phase 4: Text Rendering (Custom GDI Font Class)
-The menu, song titles, and debug info are rendered using `ID3DXFont`. Since the app pulls custom system fonts based on user configs, pre-baked sprite fonts won't easily work.
-
-**Implementation Plan:**
-1. Create a custom lightweight `CDX9Font` class.
-2. Initialization:
-   - Use standard Windows GDI (`CreateFontW`, `CreateCompatibleDC`, `CreateDIBSection`) to create an off-screen bitmap context.
-3. Drawing:
-   - When text needs to be drawn, use GDI `DrawTextW` to render the string onto the off-screen DIB.
-   - Map (`LockRect`) a D3D9 texture and copy the newly drawn DIB pixels over.
-   - Render a simple 2D textured quad covering the required screen area using `IDirect3DDevice9::DrawPrimitiveUP`.
-4. Replace all instances of `ID3DXFont->DrawTextW` and `D3DXCreateFontW`.
-5. Ensure the text renders crisply, scales correctly, and the config menus are still functional.
+## Phase 4: Font Rendering (COMPLETE)
+**Goal:** Remove `ID3DXFont` usage.
+*   **Action:** Implement a custom font renderer using GDI to draw text to a DIB (Device Independent Bitmap), then upload it to an `IDirect3DTexture9` and render it using a textured quad.
+*   **Result:** Replaced `LPD3DXFONT` inside `CTextManager` and `pluginshell.cpp` with `mdFont`, a drop-in replacement.
+*   **Impact:** Eliminates the final major `D3DX` component, completely removing `d3dx9.lib` from the build requirements.
 
 ---
 

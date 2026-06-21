@@ -340,7 +340,7 @@ bool CPlugin::RenderStringToTitleTexture()	// m_szSongMessage
             if (gdi_font)
             {
                 // create new d3dx font at 'mid' size:
-                if (D3DXCreateFontW(
+                if (mdCreateFontW(
 					    lpDevice,
 						g_title_font_sizes[mid],
 						0,
@@ -360,7 +360,7 @@ bool CPlugin::RenderStringToTitleTexture()	// m_szSongMessage
 
                     // compute size of text if drawn w/font of THIS size:
 		            temp = rect;
-		            int h = d3dx_font->DrawTextW(NULL, szTextToDraw, -1, &temp, DT_SINGLELINE | DT_CALCRECT /*| DT_NOPREFIX*/, 0xFFFFFFFF);
+		            int h = d3dx_font->mdDrawTextW(NULL, szTextToDraw, -1, &temp, DT_SINGLELINE | DT_CALCRECT /*| DT_NOPREFIX*/, 0xFFFFFFFF);
 
                     // adjust & prepare to reiterate:
 		            if (temp.right >= rect.right || h > rect.bottom-rect.top)
@@ -378,12 +378,12 @@ bool CPlugin::RenderStringToTitleTexture()	// m_szSongMessage
         if (gdi_font && d3dx_font)
         {
 	        // do actual drawing + set m_supertext.nFontSizeUsed; use 'lo' size
-            int h = d3dx_font->DrawTextW(NULL, szTextToDraw, -1, &temp, DT_SINGLELINE | DT_CALCRECT /*| DT_NOPREFIX*/ | DT_CENTER, 0xFFFFFFFF);
+            int h = d3dx_font->mdDrawTextW(NULL, szTextToDraw, -1, &temp, DT_SINGLELINE | DT_CALCRECT /*| DT_NOPREFIX*/ | DT_CENTER, 0xFFFFFFFF);
 	        temp.left   = 0;
 	        temp.right  = m_nTitleTexSizeX;  // now allow text to go all the way over, since we're actually drawing!
             temp.top    = m_nTitleTexSizeY/2 - h/2;
             temp.bottom = m_nTitleTexSizeY/2 + h/2;
-	        m_supertext.nFontSizeUsed = d3dx_font->DrawTextW(NULL, szTextToDraw, -1, &temp, DT_SINGLELINE /*| DT_NOPREFIX*/ | DT_CENTER, 0xFFFFFFFF);
+	        m_supertext.nFontSizeUsed = d3dx_font->mdDrawTextW(NULL, szTextToDraw, -1, &temp, DT_SINGLELINE /*| DT_NOPREFIX*/ | DT_CENTER, 0xFFFFFFFF);
 
             ret = true;
         }
@@ -413,7 +413,7 @@ bool CPlugin::RenderStringToTitleTexture()	// m_szSongMessage
                 break;
 
             RECT temp = rect;
-            h = m_d3dx_title_font_doublesize->DrawTextW(NULL, str, -1, &temp, DT_SINGLELINE | DT_CALCRECT /*| DT_NOPREFIX | DT_END_ELLIPSIS*/, 0xFFFFFFFF);
+            h = m_d3dx_title_font_doublesize->mdDrawTextW(NULL, str, -1, &temp, DT_SINGLELINE | DT_CALCRECT /*| DT_NOPREFIX | DT_END_ELLIPSIS*/, 0xFFFFFFFF);
             if (temp.right-temp.left <= m_nTitleTexSizeX)
                 break;
 
@@ -444,7 +444,7 @@ bool CPlugin::RenderStringToTitleTexture()	// m_szSongMessage
         temp.bottom = m_nTitleTexSizeY/2 + h/2;
 
         // NOTE: DT_END_ELLIPSIS CAUSES NOTHING TO DRAW, IF YOU USE W/D3DX9!
-	    m_supertext.nFontSizeUsed = m_d3dx_title_font_doublesize->DrawTextW(NULL, str, -1, &temp, DT_SINGLELINE /*| DT_NOPREFIX | DT_END_ELLIPSIS*/ | DT_CENTER , 0xFFFFFFFF);
+	    m_supertext.nFontSizeUsed = m_d3dx_title_font_doublesize->mdDrawTextW(NULL, str, -1, &temp, DT_SINGLELINE /*| DT_NOPREFIX | DT_END_ELLIPSIS*/ | DT_CENTER , 0xFFFFFFFF);
     }
 
     // Change the rendertarget back to the original setup

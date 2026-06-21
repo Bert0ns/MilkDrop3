@@ -1,6 +1,13 @@
 #pragma once
 #include <d3d9.h>
 
+#ifndef D3DX_DEFAULT
+#define D3DX_DEFAULT ((UINT)-1)
+#endif
+#ifndef D3DX_DEFAULT_NONPOW2
+#define D3DX_DEFAULT_NONPOW2 ((UINT)-2)
+#endif
+
 struct mdImageInfo {
     UINT Width;
     UINT Height;
