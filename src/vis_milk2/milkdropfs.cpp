@@ -1599,7 +1599,7 @@ void CPlugin::BlurPasses()
             lpDevice->SetPixelShader (m_BlurShaders[i%2].ps.ptr);
 
             // set constants
-            LPD3DXCONSTANTTABLE pCT = m_BlurShaders[i%2].ps.CT;
+            mdConstantTable* pCT = m_BlurShaders[i%2].ps.CT;
             D3DXHANDLE* h = m_BlurShaders[i%2].ps.params.const_handles;
 
             int srcw = (i==0) ? GetWidth() : m_nBlurTexW[i-1];
@@ -3816,7 +3816,7 @@ void CPlugin::RestoreShaderParams()
 
 }
 
-void CPlugin::ApplyShaderParams(CShaderParams* p, LPD3DXCONSTANTTABLE pCT, CState* pState)
+void CPlugin::ApplyShaderParams(CShaderParams* p, mdConstantTable* pCT, CState* pState)
 {
     LPDIRECT3DDEVICE9 lpDevice = GetDevice();
 

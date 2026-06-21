@@ -36,6 +36,7 @@ set(SOURCES
     src/vis_milk2/Milkdrop2PcmVisualizer.cpp
     src/vis_milk2/milkdropfs.cpp
     src/vis_milk2/md_image.cpp
+    src/vis_milk2/md_shader.cpp
     src/vis_milk2/plugin.cpp
     src/vis_milk2/pluginshell.cpp
     src/vis_milk2/state.cpp
@@ -84,6 +85,7 @@ if(WIN32)
     target_link_libraries(MilkDrop3 PRIVATE
         d3d9
         d3dx9
+        d3dcompiler
         Shlwapi
         user32
     )

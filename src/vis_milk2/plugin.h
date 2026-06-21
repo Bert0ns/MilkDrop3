@@ -213,7 +213,7 @@ public:
     tex_code      m_texcode[16];  // if ==TEX_VS, forget the pointer - texture bound @ that stage is the double-buffered VS.
 
     void Clear();
-    void CacheParams(LPD3DXCONSTANTTABLE pCT, bool bHardErrors);
+    void CacheParams(mdConstantTable* pCT, bool bHardErrors);
     void OnTextureEvict(LPDIRECT3DBASETEXTURE9 texptr);
     CShaderParams();
     ~CShaderParams();
@@ -223,7 +223,7 @@ class VShaderInfo
 {
 public:
     IDirect3DVertexShader9* ptr;
-    LPD3DXCONSTANTTABLE     CT;
+    mdConstantTable*     CT;
     CShaderParams           params;
     VShaderInfo()  { ptr=NULL; CT=NULL; params.Clear(); }
     ~VShaderInfo() { Clear(); }
@@ -234,7 +234,7 @@ class PShaderInfo
 {
 public:
     IDirect3DPixelShader9*  ptr;
-    LPD3DXCONSTANTTABLE     CT;
+    mdConstantTable*     CT;
     CShaderParams           params;
     PShaderInfo()  { ptr=NULL; CT=NULL; params.Clear(); }
     ~PShaderInfo() { Clear(); }
@@ -337,8 +337,8 @@ public:
         // PIXEL SHADERS
         DWORD                   m_dwShaderFlags;       // Shader compilation/linking flags
         //ID3DXFragmentLinker*    m_pFragmentLinker;     // Fragment linker interface
-        //LPD3DXBUFFER            m_pCompiledFragments;  // Buffer containing compiled fragments
-        LPD3DXBUFFER            m_pShaderCompileErrors;
+        //ID3DBlob*            m_pCompiledFragments;  // Buffer containing compiled fragments
+        ID3DBlob*            m_pShaderCompileErrors;
         VShaderSet              m_fallbackShaders_vs;  // *these are the only vertex shaders used for the whole app.*
         PShaderSet              m_fallbackShaders_ps;  // these are just used when the preset's pixel shaders fail to compile.
         PShaderSet              m_shaders;     // includes shader pointers and constant tables for warp & comp shaders, for cur. preset
@@ -348,13 +348,13 @@ public:
         bool                    m_bWarpShaderLock;
         bool                    m_bCompShaderLock;
         //bool LoadShaderFromFile( char* szFile, char* szFn, char* szProfile,
-        //                         LPD3DXCONSTANTTABLE* ppConstTable, void** ppShader );
+        //                         mdConstantTable** ppConstTable, void** ppShader );
         #define SHADER_WARP  0
         #define SHADER_COMP  1
         #define SHADER_BLUR  2
         #define SHADER_OTHER 3
         bool LoadShaderFromMemory( const char* szShaderText, char* szFn, char* szProfile,
-                                   LPD3DXCONSTANTTABLE* ppConstTable, void** ppShader, int shaderType, bool bHardErrors );
+                                   mdConstantTable** ppConstTable, void** ppShader, int shaderType, bool bHardErrors );
         bool RecompileVShader(const char* szShadersText, VShaderInfo *si, int shaderType, bool bHardErrors);
         bool RecompilePShader(const char* szShadersText, PShaderInfo *si, int shaderType, bool bHardErrors, int PSVersion);
         bool EvictSomeTexture();
@@ -610,7 +610,7 @@ public:
 
         bool        LoadShaders(PShaderSet* sh, CState* pState, bool bTick);
         void        UvToMathSpace(float u, float v, float* rad, float* ang);
-        void        ApplyShaderParams(CShaderParams* p, LPD3DXCONSTANTTABLE pCT, CState* pState);
+        void        ApplyShaderParams(CShaderParams* p, mdConstantTable* pCT, CState* pState);
         void        RestoreShaderParams();
         bool        AddNoiseTex(const wchar_t* szTexName, int size, int zoom_factor);
         bool        AddNoiseVol(const wchar_t* szTexName, int size, int zoom_factor);

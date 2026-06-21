@@ -2921,7 +2921,7 @@ bool PickRandomTexture(const wchar_t* prefix, wchar_t* szRetTextureFilename)  //
     return true;
 }
 
-void CShaderParams::CacheParams(LPD3DXCONSTANTTABLE pCT, bool bHardErrors)
+void CShaderParams::CacheParams(mdConstantTable* pCT, bool bHardErrors)
 {
     Clear();
 
@@ -3438,12 +3438,12 @@ bool CPlugin::LoadShaders(PShaderSet* sh, CState* pState, bool bTick)
 
 /*
 bool CPlugin::LoadShaderFromFile( char* szFile, char* szFn, char* szProfile,
-                                  LPD3DXCONSTANTTABLE* ppConstTable, void** ppShader )
+                                  mdConstantTable** ppConstTable, void** ppShader )
 {
-    LPD3DXBUFFER pShaderByteCode;
+    ID3DBlob* pShaderByteCode;
     char buf[32768];
 
-    if (D3D_OK != D3DXCompileShaderFromFile(
+    if (D3D_OK != mdCompileShaderFromFileA(
         szFile,
         NULL,//CONST D3DXMACRO* pDefines,
         NULL,//LPD3DXINCLUDE pInclude,
@@ -3488,7 +3488,7 @@ bool CPlugin::LoadShaderFromFile( char* szFile, char* szFn, char* szProfile,
 */
 
 bool CPlugin::LoadShaderFromMemory( const char* szOrigShaderText, char* szFn, char* szProfile,
-                                    LPD3DXCONSTANTTABLE* ppConstTable, void** ppShader, int shaderType, bool bHardErrors )
+                                    mdConstantTable** ppConstTable, void** ppShader, int shaderType, bool bHardErrors )
 {
     const char szWarpDefines[] = "#define rad _rad_ang.x\n"
                                  "#define ang _rad_ang.y\n"
@@ -3514,7 +3514,7 @@ bool CPlugin::LoadShaderFromMemory( const char* szOrigShaderText, char* szFn, ch
     default:           lstrcpy(szWhichShader, "(unknown)"); break;
     }
 
-    LPD3DXBUFFER pShaderByteCode;
+    ID3DBlob* pShaderByteCode;
     wchar_t title[64];
 
     *ppShader = NULL;
@@ -3657,7 +3657,7 @@ bool CPlugin::LoadShaderFromMemory( const char* szOrigShaderText, char* szFn, ch
 	bool failed=false;
     int len = lstrlen(szShaderText);
 
-    HRESULT hresult = D3DXCompileShader(
+    HRESULT hresult = mdCompileShader(
         szShaderText,
         len,
         NULL,//CONST D3DXMACRO* pDefines,
@@ -3677,7 +3677,7 @@ bool CPlugin::LoadShaderFromMemory( const char* szOrigShaderText, char* szFn, ch
 		if (failed && !strcmp(szProfile, "ps_2_a"))
 		{
 			SafeRelease(m_pShaderCompileErrors);
-			if (D3D_OK == D3DXCompileShader(szShaderText, len, NULL, NULL, szFn,
+			if (D3D_OK == mdCompileShader(szShaderText, len, NULL, NULL, szFn,
 				"ps_2_b", m_dwShaderFlags, &pShaderByteCode, &m_pShaderCompileErrors, ppConstTable))
 			{
 				failed=false;
