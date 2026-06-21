@@ -18,32 +18,32 @@ add_definitions(
 
 # Set source files
 set(SOURCES
-    audio/audiobuf.cpp
-    audio/guid.cpp
-    audio/log.cpp
-    audio/loopback-capture.cpp
-    audio/prefs.cpp
-    ns-eel2/nseel-caltab.c
-    ns-eel2/nseel-cfunc.c
-    ns-eel2/nseel-compiler.c
-    ns-eel2/nseel-eval.c
-    ns-eel2/nseel-lextab.c
-    ns-eel2/nseel-ram.c
-    ns-eel2/nseel-yylex.c
-    vis_milk2/dxcontext.cpp
-    vis_milk2/fft.cpp
-    vis_milk2/menu.cpp
-    vis_milk2/Milkdrop2PcmVisualizer.cpp
-    vis_milk2/milkdropfs.cpp
-    vis_milk2/plugin.cpp
-    vis_milk2/pluginshell.cpp
-    vis_milk2/state.cpp
-    vis_milk2/support.cpp
-    vis_milk2/texmgr.cpp
-    vis_milk2/textmgr.cpp
-    vis_milk2/utility.cpp
-    vis_milk2/wasabi.cpp
-    vis_milk2/plugin.rc
+    src/audio/audiobuf.cpp
+    src/audio/guid.cpp
+    src/audio/log.cpp
+    src/audio/loopback-capture.cpp
+    src/audio/prefs.cpp
+    src/ns-eel2/nseel-caltab.c
+    src/ns-eel2/nseel-cfunc.c
+    src/ns-eel2/nseel-compiler.c
+    src/ns-eel2/nseel-eval.c
+    src/ns-eel2/nseel-lextab.c
+    src/ns-eel2/nseel-ram.c
+    src/ns-eel2/nseel-yylex.c
+    src/vis_milk2/dxcontext.cpp
+    src/vis_milk2/fft.cpp
+    src/vis_milk2/menu.cpp
+    src/vis_milk2/Milkdrop2PcmVisualizer.cpp
+    src/vis_milk2/milkdropfs.cpp
+    src/vis_milk2/plugin.cpp
+    src/vis_milk2/pluginshell.cpp
+    src/vis_milk2/state.cpp
+    src/vis_milk2/support.cpp
+    src/vis_milk2/texmgr.cpp
+    src/vis_milk2/textmgr.cpp
+    src/vis_milk2/utility.cpp
+    src/vis_milk2/wasabi.cpp
+    src/vis_milk2/plugin.rc
 )
 
 # We want an executable
@@ -51,9 +51,9 @@ add_executable(MilkDrop3 WIN32 ${SOURCES})
 
 # Include directories
 target_include_directories(MilkDrop3 PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/audio
-    ${CMAKE_CURRENT_SOURCE_DIR}/ns-eel2
-    ${CMAKE_CURRENT_SOURCE_DIR}/vis_milk2
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/audio
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/ns-eel2
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/vis_milk2
 )
 
 # Handle DirectX 9 and Windows libraries
